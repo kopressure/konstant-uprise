@@ -1,0 +1,118 @@
+<section class="section pass" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="pass__inner">
+      {%- comment -%} Left: pitch {%- endcomment -%}
+      <div class="pass__copy">
+        <p class="eyebrow reveal">{{ section.settings.eyebrow | default: 'Membership' }}</p>
+        <h1 class="display-2 pass__title reveal" data-delay="1">{{ section.settings.heading | default: 'The Pressure Pass' }}</h1>
+        <p class="pass__lead reveal" data-delay="2">{{ section.settings.lead | default: 'One membership. Every advantage. New sounds every month, members-only pricing, and first access to every drop — engineered to keep you ahead.' }}</p>
+
+        <div class="pass__benefits">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'benefit' -%}
+              <div class="pass__benefit reveal" data-delay="{{ forloop.index0 | modulo: 4 }}" {{ block.shopify_attributes }}>
+                {% render 'icon', name: block.settings.icon %}
+                <div>
+                  <strong>{{ block.settings.title }}</strong>
+                  <p>{{ block.settings.text }}</p>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- comment -%} Right: price card {%- endcomment -%}
+      <div class="pass-card reveal" data-delay="2">
+        <span class="pass-card__tag">{{ section.settings.card_tag | default: 'Most Popular' }}</span>
+        <div class="pass-card__price">
+          <span class="amount">{{ section.settings.price | default: '$13.99' }}</span>
+          <span class="period">/ {{ section.settings.period | default: 'month' }}</span>
+        </div>
+        <ul class="pass-card__list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'bullet' -%}
+              <li {{ block.shopify_attributes }}>{% render 'icon', name: 'check' %} {{ block.settings.text }}</li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+
+        {%- comment -%} Subscription CTA: links to a selling-plan product if set, else a fallback URL {%- endcomment -%}
+        {%- if section.settings.product != blank -%}
+          {%- assign sub_variant = section.settings.product.selected_or_first_available_variant -%}
+          <form data-cart-form action="{{ routes.cart_add_url }}" method="post">
+            <input type="hidden" name="id" value="{{ sub_variant.id }}">
+            {%- if section.settings.product.selling_plan_groups.size > 0 -%}
+              {%- assign plan = section.settings.product.selling_plan_groups.first.selling_plans.first -%}
+              <input type="hidden" name="selling_plan" value="{{ plan.id }}">
+            {%- endif -%}
+            <button type="submit" class="btn btn--blue btn--lg btn--block">
+              <span class="btn__label">{{ section.settings.cta_label | default: 'Activate Pressure Pass' }}</span>
+            </button>
+          </form>
+        {%- else -%}
+          <a href="{{ section.settings.cta_link | default: '#' }}" class="btn btn--blue btn--lg btn--block">{{ section.settings.cta_label | default: 'Activate Pressure Pass' }}</a>
+        {%- endif -%}
+
+        <p class="pass-card__note">{{ section.settings.note | default: 'Cancel anytime. Billed monthly. Instant access.' }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pressure Pass",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Membership" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The Pressure Pass" },
+    { "type": "textarea", "id": "lead", "label": "Lead" },
+    { "type": "header", "content": "Price card" },
+    { "type": "text", "id": "card_tag", "label": "Card tag", "default": "Most Popular" },
+    { "type": "text", "id": "price", "label": "Price", "default": "$13.99" },
+    { "type": "text", "id": "period", "label": "Billing period", "default": "month" },
+    { "type": "product", "id": "product", "label": "Subscription product", "info": "Link a product with a monthly selling plan. Falls back to the link below if empty." },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Activate Pressure Pass" },
+    { "type": "url", "id": "cta_link", "label": "CTA fallback link" },
+    { "type": "text", "id": "note", "label": "Fine print", "default": "Cancel anytime. Billed monthly. Instant access." }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit (left list)",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "default": "wave",
+          "options": [
+            { "value": "wave", "label": "Waveform" }, { "value": "tag", "label": "Tag" },
+            { "value": "bolt", "label": "Bolt" }, { "value": "lock", "label": "Lock" },
+            { "value": "infinity", "label": "Infinity" }, { "value": "star", "label": "Star" },
+            { "value": "download", "label": "Download" }
+          ] },
+        { "type": "text", "id": "title", "label": "Title", "default": "Monthly Sample Drops" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Fresh, exclusive sounds delivered to members every single month." }
+      ]
+    },
+    {
+      "type": "bullet",
+      "name": "Bullet (price card)",
+      "settings": [ { "type": "text", "id": "text", "label": "Text", "default": "Exclusive monthly sample drops" } ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pressure Pass",
+      "blocks": [
+        { "type": "benefit", "settings": { "icon": "wave", "title": "Monthly Sample Drops", "text": "Fresh, exclusive sounds delivered to members every single month." } },
+        { "type": "benefit", "settings": { "icon": "tag", "title": "Members-Only Discounts", "text": "Standing discounts on the entire catalog — packs, licenses, bundles." } },
+        { "type": "benefit", "settings": { "icon": "lock", "title": "Exclusive Access", "text": "First in line for new releases, vault unlocks, and limited drops." } },
+        { "type": "benefit", "settings": { "icon": "bolt", "title": "Priority Support", "text": "Front-of-line on custom requests and production questions." } },
+        { "type": "bullet", "settings": { "text": "Exclusive monthly sample drops" } },
+        { "type": "bullet", "settings": { "text": "Discounts across the full catalog" } },
+        { "type": "bullet", "settings": { "text": "Early & exclusive release access" } },
+        { "type": "bullet", "settings": { "text": "100% royalty-free, instant delivery" } },
+        { "type": "bullet", "settings": { "text": "Cancel anytime" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

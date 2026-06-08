@@ -1,0 +1,44 @@
+<section class="section cta-band" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="cta-band__inner">
+      {%- if section.settings.eyebrow != blank -%}<p class="eyebrow reveal">{{ section.settings.eyebrow }}</p>{%- endif -%}
+      <h2 class="display-2 cta-band__title reveal" data-delay="1">{{ section.settings.heading | default: 'Stop searching. Start shipping hits.' }}</h2>
+      {%- if section.settings.lead != blank -%}<p class="cta-band__lead reveal" data-delay="2">{{ section.settings.lead }}</p>{%- endif -%}
+
+      {%- if section.settings.mode == 'newsletter' -%}
+        <div class="reveal" data-delay="3">
+          {% render 'klaviyo-newsletter', list_id: section.settings.klaviyo_list_id, placeholder: 'Enter your email', button_label: section.settings.button_label %}
+        </div>
+      {%- else -%}
+        <div class="hero__cta reveal" data-delay="3" style="justify-content:center">
+          {%- if section.settings.button_label != blank -%}
+            <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="btn btn--blue btn--lg">{{ section.settings.button_label }}</a>
+          {%- endif -%}
+          {%- if section.settings.button2_label != blank -%}
+            <a href="{{ section.settings.button2_link }}" class="btn btn--ghost btn--lg">{{ section.settings.button2_label }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "CTA band",
+  "settings": [
+    { "type": "select", "id": "mode", "label": "Mode", "options": [ { "value": "buttons", "label": "Buttons" }, { "value": "newsletter", "label": "Newsletter (Klaviyo)" } ], "default": "newsletter" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Uprise" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Stop searching. Start shipping hits." },
+    { "type": "textarea", "id": "lead", "label": "Lead text", "default": "Drop your email for free sounds, early access to new packs, and members-only discounts." },
+    { "type": "header", "content": "Buttons mode" },
+    { "type": "text", "id": "button_label", "label": "Button 1 label", "default": "Subscribe" },
+    { "type": "url", "id": "button_link", "label": "Button 1 link" },
+    { "type": "text", "id": "button2_label", "label": "Button 2 label" },
+    { "type": "url", "id": "button2_link", "label": "Button 2 link" },
+    { "type": "header", "content": "Newsletter mode" },
+    { "type": "text", "id": "klaviyo_list_id", "label": "Klaviyo List ID" }
+  ],
+  "presets": [{ "name": "CTA band" }]
+}
+{% endschema %}

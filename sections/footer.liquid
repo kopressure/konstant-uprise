@@ -1,0 +1,93 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      {%- comment -%} Brand column {%- endcomment -%}
+      <div class="footer__brand">
+        <div class="footer__logo">{{ section.settings.logo_text | default: 'KONSTANT UPRISE' }}</div>
+        <p class="footer__tag">{{ section.settings.tagline | default: 'Built for pressure. Engineered for hitmakers. Premium sample packs &amp; beats for producers who don’t settle.' }}</p>
+        <div class="footer__social">
+          {%- if section.settings.instagram != blank -%}<a href="{{ section.settings.instagram }}" target="_blank" rel="noopener" aria-label="Instagram">{% render 'icon', name: 'instagram' %}</a>{%- endif -%}
+          {%- if section.settings.youtube != blank -%}<a href="{{ section.settings.youtube }}" target="_blank" rel="noopener" aria-label="YouTube">{% render 'icon', name: 'youtube' %}</a>{%- endif -%}
+          {%- if section.settings.tiktok != blank -%}<a href="{{ section.settings.tiktok }}" target="_blank" rel="noopener" aria-label="TikTok">{% render 'icon', name: 'tiktok' %}</a>{%- endif -%}
+          {%- if section.settings.spotify != blank -%}<a href="{{ section.settings.spotify }}" target="_blank" rel="noopener" aria-label="Spotify">{% render 'icon', name: 'spotify' %}</a>{%- endif -%}
+        </div>
+      </div>
+
+      {%- comment -%} Link columns {%- endcomment -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'menu_column' -%}
+          <div class="footer__col" {{ block.shopify_attributes }}>
+            <h4>{{ block.settings.heading }}</h4>
+            <ul>
+              {%- if block.settings.menu != blank -%}
+                {%- for link in block.settings.menu.links -%}
+                  <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {%- endfor -%}
+              {%- else -%}
+                <li><a href="/policies/shipping-policy">Shipping</a></li>
+                <li><a href="/pages/faq">FAQ</a></li>
+                <li><a href="/pages/contact">Contact</a></li>
+                <li><a href="/policies/terms-of-service">Terms</a></li>
+                <li><a href="/policies/privacy-policy">Privacy</a></li>
+              {%- endif -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- comment -%} Newsletter (Klaviyo) {%- endcomment -%}
+      <div class="footer__news">
+        <h4>{{ section.settings.news_heading | default: 'Join The Uprise' }}</h4>
+        <p>{{ section.settings.news_text | default: 'Free drops, early access, and discounts. No spam — just pressure.' }}</p>
+        {% render 'klaviyo-newsletter', list_id: section.settings.klaviyo_list_id, placeholder: 'Your email' %}
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="footer__copy">&copy; {{ 'now' | date: '%Y' }} {{ section.settings.copyright_name | default: 'Konstant Uprise' }}. All rights reserved.</div>
+      {% render 'payment-icons' %}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "text", "id": "logo_text", "label": "Logo text", "default": "KONSTANT UPRISE" },
+    { "type": "textarea", "id": "tagline", "label": "Brand tagline" },
+    { "type": "header", "content": "Newsletter" },
+    { "type": "text", "id": "news_heading", "label": "Newsletter heading", "default": "Join The Uprise" },
+    { "type": "textarea", "id": "news_text", "label": "Newsletter text" },
+    { "type": "text", "id": "klaviyo_list_id", "label": "Klaviyo List ID", "info": "From Klaviyo list settings. Leave blank to use the onsite popup form instead." },
+    { "type": "header", "content": "Social" },
+    { "type": "url", "id": "instagram", "label": "Instagram URL" },
+    { "type": "url", "id": "youtube", "label": "YouTube URL" },
+    { "type": "url", "id": "tiktok", "label": "TikTok URL" },
+    { "type": "url", "id": "spotify", "label": "Spotify URL" },
+    { "type": "header", "content": "Legal" },
+    { "type": "text", "id": "copyright_name", "label": "Copyright name", "default": "Konstant Uprise" }
+  ],
+  "blocks": [
+    {
+      "type": "menu_column",
+      "name": "Link column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Support" },
+        { "type": "link_list", "id": "menu", "label": "Menu" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        { "type": "menu_column", "settings": { "heading": "Shop" } },
+        { "type": "menu_column", "settings": { "heading": "Support" } },
+        { "type": "menu_column", "settings": { "heading": "Company" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

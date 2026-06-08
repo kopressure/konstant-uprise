@@ -1,0 +1,25 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_dynamic_checkout": true
+      }
+    },
+    "included": {
+      "type": "product-included",
+      "blocks": {
+        "f1": { "type": "feature", "settings": { "icon": "wave", "title": "Studio-Ready WAVs", "text": "24-bit, mixed and mastered. Drag, drop, and build." } },
+        "f2": { "type": "feature", "settings": { "icon": "tag", "title": "100% Royalty-Free", "text": "Use in commercial releases with zero clearances." } },
+        "f3": { "type": "feature", "settings": { "icon": "download", "title": "Instant Download", "text": "Delivered the second checkout completes." } },
+        "f4": { "type": "feature", "settings": { "icon": "bolt", "title": "Hit-Tested Sounds", "text": "Engineered from the same kits behind real placements." } }
+      },
+      "block_order": ["f1", "f2", "f3", "f4"]
+    },
+    "related": {
+      "type": "related-products",
+      "settings": { "heading": "You May Also Like", "product_limit": 4 }
+    }
+  },
+  "order": ["main", "included", "related"]
+}

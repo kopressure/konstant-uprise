@@ -1,0 +1,82 @@
+<header class="header" data-header>
+  <div class="container">
+    <div class="header__bar">
+      {%- comment -%} Mobile toggle (left on mobile) {%- endcomment -%}
+      <button type="button" class="header__icon header__toggle" data-mobile-toggle aria-label="Open menu" aria-controls="MobileNav">
+        {% render 'icon', name: 'menu' %}
+      </button>
+
+      {%- comment -%} Logo {%- endcomment -%}
+      <a href="{{ routes.root_url }}" class="header__logo" aria-label="{{ shop.name }} home">
+        {%- if section.settings.logo != blank -%}
+          <img src="{{ section.settings.logo | image_url: width: 320 }}" alt="{{ shop.name | escape }}"
+               width="160" height="34" style="height:{{ section.settings.logo_height | default: 34 }}px;width:auto;">
+        {%- else -%}
+          {{ section.settings.logo_text | default: 'KONSTANT UPRISE' }}
+        {%- endif -%}
+      </a>
+
+      {%- comment -%} Desktop nav {%- endcomment -%}
+      <nav class="header__nav" aria-label="Primary">
+        {%- if section.settings.menu != blank -%}
+          {%- for link in section.settings.menu.links -%}
+            <a href="{{ link.url }}" {% if link.active %}aria-current="page"{% endif %}>{{ link.title }}</a>
+          {%- endfor -%}
+        {%- else -%}
+          <a href="{{ routes.all_products_collection_url }}">Shop</a>
+          <a href="/pages/pressure-pass">Pressure Pass</a>
+          <a href="/pages/custom-beats">Custom Beats</a>
+          <a href="/blogs/the-pressure-lab">The Pressure Lab</a>
+        {%- endif -%}
+      </nav>
+
+      {%- comment -%} Actions {%- endcomment -%}
+      <div class="header__actions">
+        {%- if section.settings.show_search -%}
+          <a href="{{ routes.search_url }}" class="header__icon" aria-label="Search">{% render 'icon', name: 'search' %}</a>
+        {%- endif -%}
+        <button type="button" class="header__icon" data-cart-toggle aria-label="Open cart">
+          {% render 'icon', name: 'cart' %}
+          <span class="cart-count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+{%- comment -%} Mobile drawer nav {%- endcomment -%}
+<nav class="mobile-nav" id="MobileNav" data-mobile-nav aria-hidden="true" aria-label="Mobile">
+  <div class="mobile-nav__head">
+    <span class="header__logo">{{ section.settings.logo_text | default: 'KONSTANT UPRISE' }}</span>
+    <button type="button" class="header__icon" data-mobile-close aria-label="Close menu">{% render 'icon', name: 'close' %}</button>
+  </div>
+  <div class="mobile-nav__links">
+    {%- if section.settings.menu != blank -%}
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}" data-mobile-close>{{ link.title }}</a>
+      {%- endfor -%}
+    {%- else -%}
+      <a href="{{ routes.all_products_collection_url }}" data-mobile-close>Shop</a>
+      <a href="/pages/pressure-pass" data-mobile-close>Pressure Pass</a>
+      <a href="/pages/custom-beats" data-mobile-close>Custom Beats</a>
+      <a href="/blogs/the-pressure-lab" data-mobile-close>The Pressure Lab</a>
+    {%- endif -%}
+  </div>
+  <div class="mobile-nav__footer">
+    {{ 'general.social.follow' | t: name: shop.name | default: 'Built for pressure.' }}<br>
+    &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}
+  </div>
+</nav>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo image" },
+    { "type": "range", "id": "logo_height", "min": 20, "max": 60, "step": 2, "unit": "px", "label": "Logo height", "default": 34 },
+    { "type": "text", "id": "logo_text", "label": "Logo text (fallback)", "default": "KONSTANT UPRISE" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "info": "Defaults to Shop / Pressure Pass / Custom Beats / The Pressure Lab" },
+    { "type": "checkbox", "id": "show_search", "label": "Show search icon", "default": true }
+  ]
+}
+{% endschema %}

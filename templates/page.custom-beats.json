@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "main": {
+      "type": "custom-beats",
+      "blocks": {
+        "s1": { "type": "step", "settings": { "title": "Brief", "text": "Send your vision — references, BPM, mood, and deadline." } },
+        "s2": { "type": "step", "settings": { "title": "Quote & Lock", "text": "We confirm scope, price, and timeline. A deposit locks your slot." } },
+        "s3": { "type": "step", "settings": { "title": "Production", "text": "Kopressure builds the beat with revision rounds until it’s right." } },
+        "s4": { "type": "step", "settings": { "title": "Delivery", "text": "Final mix, stems, and full rights delivered — ready to release." } }
+      },
+      "block_order": ["s1", "s2", "s3", "s4"],
+      "settings": {
+        "eyebrow": "Bespoke Production",
+        "heading": "Custom Beats & Commissions",
+        "lead": "Need something no one else has? Kopressure produces bespoke beats and exclusive instrumentals built around your sound. Tell us the vision — we engineer the pressure.",
+        "pricing_note": "Custom production starts at $250. Exclusive rights and stems available on request."
+      }
+    }
+  },
+  "order": ["main"]
+}

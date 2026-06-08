@@ -1,0 +1,16 @@
+{%- comment -%}
+  Klaviyo-integrated newsletter form.
+  Params: list_id (optional Klaviyo list G-ID), placeholder
+  If list_id is provided, theme.js submits directly to Klaviyo's list endpoint.
+  Otherwise the form still works and shows a confirmation; pair it with the
+  Klaviyo onsite popup (loaded site-wide via klaviyo.js) for full capture.
+{%- endcomment -%}
+<form class="newsletter-form" data-klaviyo-form
+      data-company-id="{{ settings.klaviyo_company_id | default: 'WQY7yT' }}"
+      {% if list_id != blank %}data-list-id="{{ list_id }}"{% endif %}>
+  <label class="visually-hidden" for="ku-news-{{ list_id | default: 'x' }}">Email address</label>
+  <input id="ku-news-{{ list_id | default: 'x' }}" type="email" name="email" required
+         placeholder="{{ placeholder | default: 'Your email' }}" autocomplete="email">
+  <button type="submit" class="btn btn--blue">{{ button_label | default: 'Subscribe' }}</button>
+  <div data-form-msg style="grid-column:1/-1;margin-top:6px;"></div>
+</form>

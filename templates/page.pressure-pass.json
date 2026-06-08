@@ -1,0 +1,39 @@
+{
+  "sections": {
+    "main": {
+      "type": "pressure-pass",
+      "blocks": {
+        "b1": { "type": "benefit", "settings": { "icon": "wave", "title": "Monthly Sample Drops", "text": "Fresh, exclusive sounds delivered to members every single month." } },
+        "b2": { "type": "benefit", "settings": { "icon": "tag", "title": "Members-Only Discounts", "text": "Standing discounts on the entire catalog — packs, licenses, bundles." } },
+        "b3": { "type": "benefit", "settings": { "icon": "lock", "title": "Exclusive Access", "text": "First in line for new releases, vault unlocks, and limited drops." } },
+        "b4": { "type": "benefit", "settings": { "icon": "bolt", "title": "Priority Support", "text": "Front-of-line on custom requests and production questions." } },
+        "u1": { "type": "bullet", "settings": { "text": "Exclusive monthly sample drops" } },
+        "u2": { "type": "bullet", "settings": { "text": "Discounts across the full catalog" } },
+        "u3": { "type": "bullet", "settings": { "text": "Early & exclusive release access" } },
+        "u4": { "type": "bullet", "settings": { "text": "100% royalty-free, instant delivery" } },
+        "u5": { "type": "bullet", "settings": { "text": "Cancel anytime" } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "u1", "u2", "u3", "u4", "u5"],
+      "settings": {
+        "eyebrow": "Membership",
+        "heading": "The Pressure Pass",
+        "lead": "One membership. Every advantage. New sounds every month, members-only pricing, and first access to every drop — engineered to keep you ahead.",
+        "card_tag": "Most Popular",
+        "price": "$13.99",
+        "period": "month",
+        "cta_label": "Activate Pressure Pass",
+        "note": "Cancel anytime. Billed monthly. Instant access."
+      }
+    },
+    "faq_cta": {
+      "type": "cta-band",
+      "settings": {
+        "mode": "newsletter",
+        "eyebrow": "Not ready yet?",
+        "heading": "Try before you commit.",
+        "lead": "Get free sample drops in your inbox and see the quality for yourself."
+      }
+    }
+  },
+  "order": ["main", "faq_cta"]
+}

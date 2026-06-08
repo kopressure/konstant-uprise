@@ -1,0 +1,71 @@
+{%- comment -%}
+  Product card with cover art, category, price, quick add.
+  Params: product (object, required), order (int, optional)
+{%- endcomment -%}
+{%- liquid
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+  assign cats = product.type
+  for tag in product.tags
+    assign cats = cats | append: ' ' | append: tag
+  endfor
+-%}
+<article class="card reveal" data-product-item
+  data-category="{{ cats | escape }}"
+  data-price="{{ product.price | divided_by: 100.0 }}"
+  data-order="{{ order | default: 0 }}">
+  <div class="card__media">
+    {%- if product.featured_media -%}
+      <img
+        src="{{ product.featured_media | image_url: width: 600 }}"
+        srcset="{{ product.featured_media | image_url: width: 400 }} 400w, {{ product.featured_media | image_url: width: 600 }} 600w, {{ product.featured_media | image_url: width: 900 }} 900w"
+        sizes="(max-width: 760px) 50vw, 25vw"
+        alt="{{ product.featured_media.alt | default: product.title | escape }}"
+        width="600" height="600" loading="lazy">
+    {%- else -%}
+      <img src="{{ 'product-1' | placeholder_svg_tag }}" alt="{{ product.title | escape }}">
+    {%- endif -%}
+    <div class="card__media-glow"></div>
+
+    {%- if product.available == false -%}
+      <span class="card__badge card__badge--sold">Sold Out</span>
+    {%- elsif on_sale -%}
+      <span class="card__badge">Sale</span>
+    {%- elsif product.tags contains 'new' or product.tags contains 'New' -%}
+      <span class="card__badge" style="background:var(--color-blue);color:#000;">New</span>
+    {%- endif -%}
+
+    {%- if product.available -%}
+      <div class="card__quick">
+        {%- if product.variants.size == 1 -%}
+          <form data-cart-form action="{{ routes.cart_add_url }}" method="post">
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <button type="submit" class="btn btn--blue btn--block">
+              <span class="btn__label">Quick Add</span>
+            </button>
+          </form>
+        {%- else -%}
+          <a href="{{ product.url }}" class="btn btn--blue btn--block">Choose Options</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="card__body">
+    {%- if product.type != blank -%}
+      <div class="card__cat">{{ product.type }}</div>
+    {%- endif -%}
+    <h3 class="card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    <div class="card__price">
+      {%- if on_sale -%}
+        <s>{{ product.compare_at_price | money }}</s><span class="on-sale">{{ product.price | money }}</span>
+      {%- elsif product.price_varies -%}
+        <span class="price--from">From</span> {{ product.price_min | money }}
+      {%- else -%}
+        {{ product.price | money }}
+      {%- endif -%}
+    </div>
+  </div>
+</article>

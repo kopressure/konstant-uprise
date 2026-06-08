@@ -1,0 +1,36 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Konstant Uprise",
+    "theme_version": "1.0.0",
+    "theme_author": "Konstant Uprise",
+    "theme_documentation_url": "https://konstantuprise.com",
+    "theme_support_url": "https://konstantuprise.com"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      { "type": "image_picker", "id": "favicon", "label": "Favicon", "info": "32 x 32px recommended" },
+      { "type": "image_picker", "id": "share_image", "label": "Social share image", "info": "Used for link previews. 1200 x 630px recommended." }
+    ]
+  },
+  {
+    "name": "Colors",
+    "info": "Defaults match the Konstant Uprise brand. Override only if needed.",
+    "settings": [
+      { "type": "color", "id": "color_bg", "label": "Background", "default": "#000000" },
+      { "type": "color", "id": "color_text", "label": "Text", "default": "#ffffff" },
+      { "type": "color", "id": "color_blue", "label": "Accent — electric blue", "default": "#00AAFF" },
+      { "type": "color", "id": "color_red", "label": "Accent — crimson red", "default": "#CC0000" }
+    ]
+  },
+  {
+    "name": "Integrations",
+    "settings": [
+      { "type": "header", "content": "Klaviyo (Email / SMS)" },
+      { "type": "text", "id": "klaviyo_company_id", "label": "Klaviyo Company ID (public API key)", "default": "WQY7yT", "info": "Loads klaviyo.js site-wide for the onsite popup and forms." },
+      { "type": "header", "content": "Meta Pixel" },
+      { "type": "text", "id": "meta_pixel_id", "label": "Meta Pixel ID", "info": "Paste your numeric Pixel ID to enable PageView + AddToCart tracking. Leave blank to disable." }
+    ]
+  }
+]

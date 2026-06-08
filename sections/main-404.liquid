@@ -1,0 +1,17 @@
+<section class="section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="cta-band__inner text-center" style="padding-block:clamp(40px,8vw,100px)">
+      <p class="eyebrow">Error 404</p>
+      <h1 class="display-1" style="margin-top:14px">Off The Grid</h1>
+      <p class="cta-band__lead">This page slipped through the cracks. Let’s get you back to the pressure.</p>
+      <div class="hero__cta" style="justify-content:center;margin-top:32px">
+        <a href="{{ routes.root_url }}" class="btn btn--primary btn--lg">Home</a>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--blue btn--lg">Shop All</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "404", "settings": [] }
+{% endschema %}

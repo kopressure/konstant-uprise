@@ -1,0 +1,70 @@
+<section class="collection-hero" data-section-id="{{ section.id }}">
+  <div class="container">
+    <p class="eyebrow reveal">{{ section.settings.eyebrow | default: 'The Catalog' }}</p>
+    <h1 class="display-2 reveal" data-delay="1">{{ collection.title | default: 'Shop All' }}</h1>
+    {%- if collection.description != blank and section.settings.show_description -%}
+      <div class="section-head__lead reveal" data-delay="2" style="max-width:620px">{{ collection.description }}</div>
+    {%- endif -%}
+  </div>
+</section>
+
+<section class="container" data-section-id="{{ section.id }}-grid">
+  {%- comment -%} ---------- Filter + sort bar ---------- {%- endcomment -%}
+  <div class="filter-bar" data-filter-bar>
+    <div class="filter-chips">
+      <button type="button" class="chip is-active" data-filter="all">All</button>
+      {%- if section.settings.categories != blank -%}
+        {%- assign cats = section.settings.categories | split: ',' -%}
+        {%- for cat in cats -%}
+          <button type="button" class="chip" data-filter="{{ cat | strip | escape }}">{{ cat | strip }}</button>
+        {%- endfor -%}
+      {%- else -%}
+        <button type="button" class="chip" data-filter="Sample Pack">Sample Packs</button>
+        <button type="button" class="chip" data-filter="Beat License">Beat Licenses</button>
+        <button type="button" class="chip" data-filter="Bundle">Bundles</button>
+      {%- endif -%}
+    </div>
+    <div class="filter-sort">
+      <label class="visually-hidden" for="ku-sort">Sort by</label>
+      <select id="ku-sort" data-sort>
+        <option value="featured">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+      </select>
+    </div>
+  </div>
+
+  {%- comment -%} ---------- Grid ---------- {%- endcomment -%}
+  {%- paginate collection.products by 24 -%}
+    {%- if collection.products.size > 0 -%}
+      <div class="product-grid" data-product-grid>
+        {%- for product in collection.products -%}
+          {% render 'product-card', product: product, order: forloop.index %}
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="pagination" style="display:flex;gap:10px;justify-content:center;margin-top:48px" aria-label="Pagination">
+          {%- if paginate.previous -%}<a class="btn btn--ghost" href="{{ paginate.previous.url }}">&larr; Prev</a>{%- endif -%}
+          {%- if paginate.next -%}<a class="btn btn--ghost" href="{{ paginate.next.url }}">Next &rarr;</a>{%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- else -%}
+      <div class="collection-empty">
+        <p>No drops here yet. Check back soon — or browse the full catalog.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--blue" style="margin-top:18px">Shop All</a>
+      </div>
+    {%- endif -%}
+  {%- endpaginate -%}
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Catalog" },
+    { "type": "checkbox", "id": "show_description", "label": "Show collection description", "default": true },
+    { "type": "text", "id": "categories", "label": "Filter categories", "info": "Comma-separated. Matches against product type + tags.", "default": "Sample Pack, Beat License, Bundle" }
+  ]
+}
+{% endschema %}

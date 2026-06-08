@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "eyebrow": "The Catalog",
+        "show_description": true,
+        "categories": "Sample Pack, Beat License, Bundle"
+      }
+    }
+  },
+  "order": ["main"]
+}

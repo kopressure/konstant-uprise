@@ -1,0 +1,90 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "Kopressure // Konstant Uprise",
+        "headline": "Built for pressure. Engineered for hitmakers.",
+        "subheadline": "Premium sample packs & beats for producers who don’t settle.",
+        "cta1_label": "Shop Now",
+        "cta2_label": "Get Pressure Pass",
+        "cta2_link": "/pages/pressure-pass",
+        "show_scroll": true
+      }
+    },
+    "logo_strip": {
+      "type": "logo-strip",
+      "blocks": {
+        "l1": { "type": "logo", "settings": { "text": "PLATINUM PLACEMENTS" } },
+        "l2": { "type": "logo", "settings": { "text": "ROYALTY-FREE" } },
+        "l3": { "type": "logo", "settings": { "text": "STUDIO MASTERED" } },
+        "l4": { "type": "logo", "settings": { "text": "10,000+ PRODUCERS" } },
+        "l5": { "type": "logo", "settings": { "text": "INSTANT DELIVERY" } },
+        "l6": { "type": "logo", "settings": { "text": "BUILT FOR PRESSURE" } }
+      },
+      "block_order": ["l1", "l2", "l3", "l4", "l5", "l6"]
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "The Catalog",
+        "heading": "Featured Drops",
+        "lead": "Studio-ready sounds engineered for the charts. Mixed, mastered, and royalty-cleared.",
+        "product_limit": 8,
+        "view_all_link": "/collections/all"
+      }
+    },
+    "brand": {
+      "type": "brand-statement",
+      "blocks": {
+        "s1": { "type": "stat", "settings": { "number": "10K", "suffix": "+", "label": "Producers served" } },
+        "s2": { "type": "stat", "settings": { "number": "100", "suffix": "%", "label": "Royalty-free" } },
+        "s3": { "type": "stat", "settings": { "number": "500", "suffix": "+", "label": "Sounds released" } }
+      },
+      "block_order": ["s1", "s2", "s3"],
+      "settings": {
+        "eyebrow": "The Brand",
+        "heading": "Engineered in the dark. Built for the spotlight.",
+        "signature": "— KOPRESSURE",
+        "signature_role": "Founder & Lead Producer"
+      }
+    },
+    "pass_teaser": {
+      "type": "cta-band",
+      "settings": {
+        "mode": "buttons",
+        "eyebrow": "Membership",
+        "heading": "Unlock the Pressure Pass",
+        "lead": "Monthly sample drops, members-only discounts, and first access to every release — $13.99/month.",
+        "button_label": "Get Pressure Pass",
+        "button_link": "/pages/pressure-pass",
+        "button2_label": "Browse Catalog",
+        "button2_link": "/collections/all"
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "t1": { "type": "testimonial", "settings": { "quote": "The drums hit different. First pack I bought landed me a placement two weeks later. KU is in every session now.", "name": "Marcus T.", "role": "Producer, ATL", "rating": 5 } },
+        "t2": { "type": "testimonial", "settings": { "quote": "Pressure Pass pays for itself. The monthly drops are consistently the best sounds in my library — mixed and ready.", "name": "Dani R.", "role": "Beatmaker, LA", "rating": 5 } },
+        "t3": { "type": "testimonial", "settings": { "quote": "Royalty-cleared and label-quality. I stopped digging for samples and started finishing songs. Worth every dollar.", "name": "Khalil A.", "role": "Recording Artist", "rating": 5 } }
+      },
+      "block_order": ["t1", "t2", "t3"],
+      "settings": {
+        "eyebrow": "Social Proof",
+        "heading": "Trusted by hitmakers",
+        "lead": "From bedroom producers to platinum placements — the pressure speaks for itself."
+      }
+    },
+    "newsletter": {
+      "type": "cta-band",
+      "settings": {
+        "mode": "newsletter",
+        "eyebrow": "The Uprise",
+        "heading": "Stop searching. Start shipping hits.",
+        "lead": "Drop your email for free sounds, early access to new packs, and members-only discounts."
+      }
+    }
+  },
+  "order": ["hero", "logo_strip", "featured", "brand", "pass_teaser", "testimonials", "newsletter"]
+}

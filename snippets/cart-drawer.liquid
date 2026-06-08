@@ -1,0 +1,54 @@
+{%- comment -%} Slide-in cart drawer — populated/refreshed via AJAX in theme.js {%- endcomment -%}
+<aside class="cart-drawer" data-cart-drawer aria-hidden="true" aria-label="Shopping cart" role="dialog">
+  <header class="cart-drawer__head">
+    <h3>Your Cart</h3>
+    <button type="button" class="header__icon" data-cart-close aria-label="Close cart">
+      {% render 'icon', name: 'close' %}
+    </button>
+  </header>
+
+  <div class="cart-drawer__items" data-cart-items>
+    {%- if cart.item_count > 0 -%}
+      {%- for item in cart.items -%}
+        <div class="cart-line" data-line-key="{{ item.key }}">
+          <a class="cart-line__img" href="{{ item.url }}">
+            {%- if item.image -%}<img src="{{ item.image | image_url: width: 160 }}" alt="{{ item.product.title | escape }}" loading="lazy">{%- endif -%}
+          </a>
+          <div>
+            <a class="cart-line__title" href="{{ item.url }}">{{ item.product.title }}</a>
+            {%- unless item.variant.title contains 'Default' -%}
+              <div class="cart-line__variant">{{ item.variant.title }}</div>
+            {%- endunless -%}
+            <div class="cart-line__bottom">
+              <div class="cart-line__qty">
+                <button type="button" data-qty-down aria-label="Decrease quantity">&minus;</button>
+                <span>{{ item.quantity }}</span>
+                <button type="button" data-qty-up aria-label="Increase quantity">+</button>
+              </div>
+              <button type="button" class="cart-line__remove" data-line-remove>Remove</button>
+            </div>
+          </div>
+          <div class="cart-line__price">{{ item.final_line_price | money }}</div>
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      <div class="cart-empty">
+        {% render 'icon', name: 'cart' %}
+        <p>Your cart is empty.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--ghost" data-cart-close style="margin-top:18px">Browse Drops</a>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <footer class="cart-drawer__foot" data-cart-foot {% if cart.item_count == 0 %}hidden{% endif %}>
+    <div class="cart-drawer__subtotal">
+      <span>Subtotal</span>
+      <span data-cart-subtotal>{{ cart.total_price | money }}</span>
+    </div>
+    <p class="cart-drawer__taxnote">Taxes &amp; discounts calculated at checkout. Digital products deliver instantly.</p>
+    <a href="{{ routes.cart_url }}" class="btn btn--ghost btn--block" style="margin-bottom:10px">View Cart</a>
+    <form action="{{ routes.cart_url }}" method="post">
+      <button type="submit" name="checkout" class="btn btn--blue btn--block btn--lg">Checkout</button>
+    </form>
+  </footer>
+</aside>

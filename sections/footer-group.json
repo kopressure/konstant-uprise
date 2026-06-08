@@ -1,0 +1,32 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "col_shop": {
+          "type": "menu_column",
+          "settings": { "heading": "Shop" }
+        },
+        "col_support": {
+          "type": "menu_column",
+          "settings": { "heading": "Support" }
+        },
+        "col_company": {
+          "type": "menu_column",
+          "settings": { "heading": "Company" }
+        }
+      },
+      "block_order": ["col_shop", "col_support", "col_company"],
+      "settings": {
+        "logo_text": "KONSTANT UPRISE",
+        "tagline": "Built for pressure. Engineered for hitmakers. Premium sample packs & beats for producers who don’t settle.",
+        "news_heading": "Join The Uprise",
+        "news_text": "Free drops, early access, and discounts. No spam — just pressure.",
+        "copyright_name": "Konstant Uprise"
+      }
+    }
+  },
+  "order": ["footer"]
+}

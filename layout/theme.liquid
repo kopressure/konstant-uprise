@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="theme-color" content="#000000">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    {%- capture seo_title -%}
+      {{ page_title }}
+      {%- if current_tags %} &ndash; {{ 'general.meta.tags' | t: tags: current_tags | join: ', ' }}{% endif -%}
+      {%- if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    {%- endcapture -%}
+    <title>{{ seo_title | strip }}</title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {% render 'meta-tags' %}
+
+    {%- comment -%} Brand fonts: wide tracked display + clean body {%- endcomment -%}
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    {{ content_for_header }}
+
+    {%- comment -%} ----- Klaviyo (Email/SMS) ----- {%- endcomment -%}
+    {%- assign klaviyo_id = settings.klaviyo_company_id | default: 'WQY7yT' -%}
+    {%- if klaviyo_id != blank -%}
+      <script async type="text/javascript" src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id={{ klaviyo_id }}"></script>
+    {%- endif -%}
+
+    {%- comment -%} ----- Meta Pixel (placeholder — set ID in theme settings) ----- {%- endcomment -%}
+    {%- if settings.meta_pixel_id != blank -%}
+      <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '{{ settings.meta_pixel_id }}');
+        fbq('track', 'PageView');
+      </script>
+      <noscript><img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id={{ settings.meta_pixel_id }}&ev=PageView&noscript=1"/></noscript>
+    {%- endif -%}
+
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+
+    {%- comment -%} Brand color overrides from theme settings {%- endcomment -%}
+    <style>
+      :root {
+        --color-bg: {{ settings.color_bg | default: '#000000' }};
+        --color-text: {{ settings.color_text | default: '#ffffff' }};
+        --color-blue: {{ settings.color_blue | default: '#00AAFF' }};
+        --color-red: {{ settings.color_red | default: '#CC0000' }};
+      }
+    </style>
+
+    <script>document.documentElement.className = document.documentElement.className.replace('no-js','js');</script>
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+
+    {%- comment -%} Cart route + money format exposed to JS {%- endcomment -%}
+    <script>
+      window.KU = window.KU || {};
+      window.KU.routes = {
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        cart_get_url: '{{ routes.cart_url }}.js',
+        all_products_url: '{{ routes.all_products_collection_url }}'
+      };
+      window.KU.moneyFormat = {{ shop.money_format | json }};
+    </script>
+  </head>
+
+  <body class="template-{{ request.page_type | handle }}">
+    <a class="skip-to-content" href="#MainContent">{{ 'accessibility.skip_to_text' | t }}</a>
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" class="main-content" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {% render 'cart-drawer' %}
+
+    <div id="ku-overlay" class="ku-overlay" data-overlay hidden></div>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+    <title>{{ 'gift_cards.issued.title' | t: value: gift_card.balance | money, shop: shop.name }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {{ content_for_header }}
+  </head>
+  <body class="template-gift-card">
+    <section class="section">
+      <div class="container" style="max-width:560px;text-align:center">
+        <p class="eyebrow">{{ shop.name }}</p>
+        <h1 class="display-2" style="margin-top:12px">Gift Card</h1>
+        <div class="pass-card" style="margin-top:32px">
+          <span class="pass-card__tag">{% if gift_card.enabled %}Active{% else %}Disabled{% endif %}</span>
+          <div class="pass-card__price"><span class="amount">{{ gift_card.balance | money_without_trailing_zeros }}</span></div>
+          {%- if gift_card.balance != gift_card.initial_value -%}
+            <p class="pass-card__note">Original value: {{ gift_card.initial_value | money }}</p>
+          {%- endif -%}
+
+          {%- assign code = gift_card.code | format_code -%}
+          <div class="field" style="margin-top:24px">
+            <label>Your code</label>
+            <input type="text" value="{{ code }}" readonly style="text-align:center;letter-spacing:0.2em;font-family:var(--font-display)">
+          </div>
+
+          {%- if gift_card.qr_identifier -%}
+            <img src="{{ gift_card.qr_identifier | payment_icon_png_url }}" alt="" style="margin:20px auto 0">
+          {%- endif -%}
+
+          <a href="{{ shop.url }}" class="btn btn--blue btn--lg btn--block" style="margin-top:24px">Start Shopping</a>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

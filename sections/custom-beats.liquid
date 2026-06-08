@@ -1,0 +1,132 @@
+<section class="collection-hero" data-section-id="{{ section.id }}">
+  <div class="container">
+    <p class="eyebrow reveal">{{ section.settings.eyebrow | default: 'Bespoke Production' }}</p>
+    <h1 class="display-2 reveal" data-delay="1">{{ section.settings.heading | default: 'Custom Beats & Commissions' }}</h1>
+    {%- if section.settings.lead != blank -%}
+      <p class="section-head__lead reveal" data-delay="2" style="max-width:640px">{{ section.settings.lead }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+<section class="section" style="padding-top:clamp(20px,3vw,40px)" data-section-id="{{ section.id }}-body">
+  <div class="container">
+    <div class="commission">
+      {%- comment -%} Left: service description + steps {%- endcomment -%}
+      <div class="commission__intro reveal">
+        <h2 class="h-section">{{ section.settings.process_heading | default: 'How It Works' }}</h2>
+        <div class="commission__steps">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'step' -%}
+              <div class="commission__step" {{ block.shopify_attributes }}>
+                <span class="num">{{ forloop.index }}</span>
+                <div>
+                  <h4>{{ block.settings.title }}</h4>
+                  <p>{{ block.settings.text }}</p>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- if section.settings.pricing_note != blank -%}
+          <p class="form__note" style="margin-top:28px">{{ section.settings.pricing_note }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Right: inquiry form (Shopify contact form) {%- endcomment -%}
+      <div class="commission__form reveal" data-delay="1">
+        <h2 class="h-section" style="margin-bottom:24px">{{ section.settings.form_heading | default: 'Start Your Project' }}</h2>
+
+        {%- form 'contact', class: 'form' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="form-success">{% render 'icon', name: 'check' %} Got it — your request is in. We’ll hit you back within 48 hours.</div>
+          {%- elsif form.errors -%}
+            <div class="form-error">There was a problem submitting the form: {{ form.errors | default_errors }}</div>
+          {%- endif -%}
+
+          <div class="form-row">
+            <div class="field">
+              <label for="cb-name">Name</label>
+              <input type="text" id="cb-name" name="contact[name]" required>
+            </div>
+            <div class="field">
+              <label for="cb-email">Email</label>
+              <input type="email" id="cb-email" name="contact[email]" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="cb-type">Project Type</label>
+              <select id="cb-type" name="contact[project_type]">
+                <option>Custom Beat</option>
+                <option>Exclusive Production</option>
+                <option>Mixing / Mastering</option>
+                <option>Sample Pack Collab</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="cb-budget">Budget Range</label>
+              <select id="cb-budget" name="contact[budget]">
+                <option>Under $250</option>
+                <option>$250 – $500</option>
+                <option>$500 – $1,000</option>
+                <option>$1,000+</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="cb-ref">Reference Links (optional)</label>
+            <input type="text" id="cb-ref" name="contact[references]" placeholder="Spotify, YouTube, or SoundCloud links">
+          </div>
+
+          <div class="field">
+            <label for="cb-msg">Tell us about the project</label>
+            <textarea id="cb-msg" name="contact[body]" required placeholder="Vibe, BPM, deadline, who it’s for…"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--blue btn--lg">Send Inquiry</button>
+          <p class="form__note">We typically respond within 48 hours. Serious inquiries only.</p>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Custom Beats",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Bespoke Production" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Custom Beats & Commissions" },
+    { "type": "textarea", "id": "lead", "label": "Lead", "default": "Need something no one else has? Kopressure produces bespoke beats and exclusive instrumentals built around your sound. Tell us the vision — we engineer the pressure." },
+    { "type": "text", "id": "process_heading", "label": "Process heading", "default": "How It Works" },
+    { "type": "text", "id": "form_heading", "label": "Form heading", "default": "Start Your Project" },
+    { "type": "textarea", "id": "pricing_note", "label": "Pricing note", "default": "Custom production starts at $250. Exclusive rights and stems available on request." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Brief" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Send your vision — references, BPM, mood, and deadline." }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Custom Beats",
+      "blocks": [
+        { "type": "step", "settings": { "title": "Brief", "text": "Send your vision — references, BPM, mood, and deadline." } },
+        { "type": "step", "settings": { "title": "Quote & Lock", "text": "We confirm scope, price, and timeline. A deposit locks your slot." } },
+        { "type": "step", "settings": { "title": "Production", "text": "Kopressure builds the beat with revision rounds until it’s right." } },
+        { "type": "step", "settings": { "title": "Delivery", "text": "Final mix, stems, and full rights delivered — ready to release." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

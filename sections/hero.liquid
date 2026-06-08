@@ -1,0 +1,55 @@
+<section class="hero" data-section-id="{{ section.id }}">
+  <div class="hero__media {% unless section.settings.background_image or section.settings.background_video %}hero__media--empty{% endunless %}">
+    {%- if section.settings.background_video != blank -%}
+      {{ section.settings.background_video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true }}
+    {%- elsif section.settings.background_image != blank -%}
+      <img src="{{ section.settings.background_image | image_url: width: 2000 }}"
+           srcset="{{ section.settings.background_image | image_url: width: 1000 }} 1000w, {{ section.settings.background_image | image_url: width: 1600 }} 1600w, {{ section.settings.background_image | image_url: width: 2400 }} 2400w"
+           sizes="100vw" alt="" fetchpriority="high" width="2000" height="1125">
+    {%- endif -%}
+  </div>
+
+  <div class="container">
+    <div class="hero__inner">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow reveal">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h1 class="display-1 hero__title reveal" data-delay="1">{{ section.settings.headline | default: 'Built for pressure. Engineered for hitmakers.' }}</h1>
+      {%- if section.settings.subheadline != blank -%}
+        <p class="hero__sub reveal" data-delay="2">{{ section.settings.subheadline }}</p>
+      {%- endif -%}
+      <div class="hero__cta reveal" data-delay="3">
+        {%- if section.settings.cta1_label != blank -%}
+          <a href="{{ section.settings.cta1_link | default: routes.all_products_collection_url }}" class="btn btn--primary btn--lg">{{ section.settings.cta1_label }}</a>
+        {%- endif -%}
+        {%- if section.settings.cta2_label != blank -%}
+          <a href="{{ section.settings.cta2_link | default: '/pages/pressure-pass' }}" class="btn btn--blue btn--lg">{{ section.settings.cta2_label }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- if section.settings.show_scroll -%}
+    <div class="hero__scroll"><span>Scroll</span></div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Kopressure // Konstant Uprise" },
+    { "type": "textarea", "id": "headline", "label": "Headline", "default": "Built for pressure. Engineered for hitmakers." },
+    { "type": "textarea", "id": "subheadline", "label": "Subheadline", "default": "Premium sample packs & beats for producers who don’t settle." },
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    { "type": "video", "id": "background_video", "label": "Background video (optional)" },
+    { "type": "header", "content": "Call to action" },
+    { "type": "text", "id": "cta1_label", "label": "Primary button label", "default": "Shop Now" },
+    { "type": "url", "id": "cta1_link", "label": "Primary button link" },
+    { "type": "text", "id": "cta2_label", "label": "Secondary button label", "default": "Get Pressure Pass" },
+    { "type": "url", "id": "cta2_link", "label": "Secondary button link" },
+    { "type": "checkbox", "id": "show_scroll", "label": "Show scroll indicator", "default": true }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

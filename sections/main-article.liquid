@@ -1,0 +1,26 @@
+<article class="section" data-section-id="{{ section.id }}">
+  <div class="container" style="max-width:820px">
+    <div class="text-center reveal" style="margin-bottom:36px">
+      <p class="eyebrow">{{ article.published_at | date: '%B %d, %Y' }}{% if article.author != blank %} · {{ article.author }}{% endif %}</p>
+      <h1 class="display-2" style="margin-top:14px">{{ article.title }}</h1>
+    </div>
+
+    {%- if article.image -%}
+      <div class="product__main-img reveal" data-delay="1" style="margin-bottom:36px">
+        <img src="{{ article.image | image_url: width: 1200 }}" alt="{{ article.title | escape }}" width="1200" height="675">
+      </div>
+    {%- endif -%}
+
+    <div class="product__desc rte reveal" data-delay="2" style="color:var(--color-text-dim);font-size:1.05rem">
+      {{ article.content }}
+    </div>
+
+    <div style="margin-top:48px;text-align:center">
+      <a href="{{ blog.url }}" class="link-underline">&larr; Back to {{ blog.title }}</a>
+    </div>
+  </div>
+</article>
+
+{% schema %}
+{ "name": "Article", "settings": [] }
+{% endschema %}

@@ -1,0 +1,37 @@
+<section class="section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__text">
+        <p class="eyebrow reveal">The Catalog</p>
+        <h1 class="display-2 section-head__title reveal" data-delay="1">{{ section.settings.heading | default: 'Collections' }}</h1>
+      </div>
+    </div>
+    <div class="product-grid product-grid--4">
+      {%- for collection in collections -%}
+        {%- unless collection.handle == 'frontpage' -%}
+          <a class="card reveal" href="{{ collection.url }}" data-delay="{{ forloop.index0 | modulo: 4 }}">
+            <div class="card__media">
+              {%- if collection.featured_image -%}
+                <img src="{{ collection.featured_image | image_url: width: 600 }}" alt="{{ collection.title | escape }}" loading="lazy" width="600" height="600">
+              {%- else -%}
+                <img src="{{ 'collection-1' | placeholder_svg_tag }}" alt="{{ collection.title | escape }}">
+              {%- endif -%}
+              <div class="card__media-glow"></div>
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">{{ collection.title }}</h3>
+              <div class="card__price price--from">{{ collection.products_count }} items</div>
+            </div>
+          </a>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collections list",
+  "settings": [ { "type": "text", "id": "heading", "label": "Heading", "default": "Collections" } ]
+}
+{% endschema %}

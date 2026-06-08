@@ -1,0 +1,150 @@
+<section class="section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="product" data-product-wrapper>
+      {%- comment -%} ---------- Gallery ---------- {%- endcomment -%}
+      <div class="product__gallery" data-gallery>
+        <div class="product__main-img" data-gallery-main>
+          {%- if product.featured_media -%}
+            <img src="{{ product.featured_media | image_url: width: 1100 }}"
+                 srcset="{{ product.featured_media | image_url: width: 700 }} 700w, {{ product.featured_media | image_url: width: 1100 }} 1100w"
+                 sizes="(max-width: 990px) 100vw, 50vw"
+                 alt="{{ product.featured_media.alt | default: product.title | escape }}" width="1100" height="1100" fetchpriority="high">
+          {%- else -%}
+            <img src="{{ 'product-1' | placeholder_svg_tag }}" alt="{{ product.title | escape }}">
+          {%- endif -%}
+        </div>
+        {%- if product.media.size > 1 -%}
+          <div class="product__thumbs">
+            {%- for media in product.media limit: 8 -%}
+              <button type="button" class="product__thumb {% if forloop.first %}is-active{% endif %}" data-gallery-thumb
+                      data-full="{{ media | image_url: width: 1100 }}" aria-label="View image {{ forloop.index }}">
+                <img src="{{ media | image_url: width: 160 }}" alt="{{ media.alt | escape }}" width="76" height="76" loading="lazy">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ---------- Info ---------- {%- endcomment -%}
+      <div class="product__info">
+        {%- if product.type != blank -%}<p class="eyebrow product__cat">{{ product.type }}</p>{%- endif -%}
+        <h1 class="product__title">{{ product.title }}</h1>
+
+        {%- liquid
+          assign current = product.selected_or_first_available_variant
+          assign on_sale = false
+          if current.compare_at_price > current.price
+            assign on_sale = true
+          endif
+        -%}
+        <div class="product__price" data-product-price>
+          {%- if on_sale -%}
+            <s>{{ current.compare_at_price | money }}</s><span class="on-sale">{{ current.price | money }}</span>
+          {%- else -%}
+            {{ current.price | money }}
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} ---------- Audio preview ---------- {%- endcomment -%}
+        {%- assign preview_url = product.metafields.custom.audio_preview -%}
+        {%- if preview_url != blank or section.settings.demo_audio_url != blank -%}
+          <div class="audio-preview">
+            <div class="audio-preview__head">{% render 'icon', name: 'wave' %}<span class="eyebrow">Preview</span></div>
+            <div class="audio-row" data-audio="{{ preview_url | default: section.settings.demo_audio_url }}">
+              <button type="button" class="audio-play" data-audio-play aria-label="Play preview">{% render 'icon', name: 'play' %}</button>
+              <span class="audio-row__name">{{ product.title }} — Demo</span>
+              <span class="audio-row__bar"><i></i></span>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} ---------- Buy form ---------- {%- endcomment -%}
+        <div class="product__form">
+          <form data-product-form data-cart-form action="{{ routes.cart_add_url }}" method="post">
+            {%- unless product.has_only_default_variant -%}
+              <div class="product__variants">
+                {%- for option in product.options_with_values -%}
+                  <div class="variant-group" data-option-index="{{ forloop.index0 }}">
+                    <label>{{ option.name }}</label>
+                    <div class="variant-options">
+                      {%- for value in option.values -%}
+                        {%- assign opt_id = section.id | append: '-' | append: forloop.parentloop.index0 | append: '-' | append: forloop.index0 -%}
+                        <input type="radio" name="option-{{ forloop.parentloop.index0 }}" id="{{ opt_id }}"
+                               value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %}>
+                        <label for="{{ opt_id }}" class="swatch">{{ value }}</label>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- endunless -%}
+
+            <input type="hidden" name="id" value="{{ current.id }}" data-variant-id>
+
+            <div class="qty-add">
+              <div class="qty">
+                <button type="button" data-qty-minus aria-label="Decrease quantity">&minus;</button>
+                <input type="number" name="quantity" value="1" min="1" data-qty-input aria-label="Quantity">
+                <button type="button" data-qty-plus aria-label="Increase quantity">+</button>
+              </div>
+              <button type="submit" class="btn btn--blue btn--lg btn--block" {% unless current.available %}disabled{% endunless %}>
+                <span class="btn__label">{% if current.available %}Add to Cart{% else %}Sold Out{% endif %}</span>
+              </button>
+            </div>
+
+            {%- comment -%} Dynamic checkout (Shop Pay / Apple Pay / etc.) {%- endcomment -%}
+            {%- if section.settings.show_dynamic_checkout -%}
+              {{ form | payment_button }}
+            {%- endif -%}
+          </form>
+
+          <div class="product__trust">
+            <span>{% render 'icon', name: 'download' %} Instant digital delivery</span>
+            <span>{% render 'icon', name: 'lock' %} Secure checkout</span>
+            <span>{% render 'icon', name: 'check' %} 100% royalty-free</span>
+          </div>
+        </div>
+
+        {%- comment -%} ---------- Description ---------- {%- endcomment -%}
+        {%- if product.description != blank -%}
+          <div class="product__desc rte">{{ product.description }}</div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Variant data for JS {%- endcomment -%}
+  <script type="application/json" data-variant-json data-belongs="{{ section.id }}" style="display:none">
+    [
+      {%- for v in product.variants -%}
+        {
+          "id": {{ v.id }},
+          "available": {{ v.available }},
+          "price": {{ v.price }},
+          "compare_at_price": {{ v.compare_at_price | default: 0 }},
+          "options": {{ v.options | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  </script>
+</section>
+
+{%- comment -%} Make variant JSON discoverable inside the form for theme.js scoping {%- endcomment -%}
+<script>
+  (function(){
+    var f = document.querySelector('[data-product-form]');
+    var j = document.querySelector('[data-variant-json][data-belongs="{{ section.id }}"]');
+    if (f && j && !f.contains(j)) { f.appendChild(j); }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout buttons", "default": true },
+    { "type": "header", "content": "Audio preview" },
+    { "type": "url", "id": "demo_audio_url", "label": "Fallback demo audio URL", "info": "Per-product audio uses the metafield custom.audio_preview. This is a fallback for previewing." }
+  ]
+}
+{% endschema %}

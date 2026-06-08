@@ -1,0 +1,57 @@
+<section class="collection-hero" data-section-id="{{ section.id }}">
+  <div class="container">
+    <p class="eyebrow reveal">{{ section.settings.eyebrow | default: 'The Pressure Lab' }}</p>
+    <h1 class="display-2 reveal" data-delay="1">{{ blog.title | default: 'The Pressure Lab' }}</h1>
+    {%- if section.settings.lead != blank -%}
+      <p class="section-head__lead reveal" data-delay="2" style="max-width:620px">{{ section.settings.lead }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+<section class="section" style="padding-top:clamp(20px,3vw,40px)" data-section-id="{{ section.id }}-grid">
+  <div class="container">
+    {%- paginate blog.articles by 9 -%}
+      {%- if blog.articles.size > 0 -%}
+        <div class="product-grid product-grid--4">
+          {%- for article in blog.articles -%}
+            <a class="card reveal" href="{{ article.url }}" data-delay="{{ forloop.index0 | modulo: 4 }}">
+              <div class="card__media">
+                {%- if article.image -%}
+                  <img src="{{ article.image | image_url: width: 600 }}" alt="{{ article.title | escape }}" loading="lazy" width="600" height="600">
+                {%- else -%}
+                  <img src="{{ 'image' | placeholder_svg_tag }}" alt="">
+                {%- endif -%}
+                <div class="card__media-glow"></div>
+              </div>
+              <div class="card__body">
+                <div class="card__cat">{{ article.published_at | date: '%b %d, %Y' }}</div>
+                <h3 class="card__title">{{ article.title }}</h3>
+                {%- if article.excerpt_or_content != blank -%}
+                  <p class="card__price price--from" style="margin-top:8px">{{ article.excerpt_or_content | strip_html | truncatewords: 16 }}</p>
+                {%- endif -%}
+              </div>
+            </a>
+          {%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}
+          <nav class="pagination" style="display:flex;gap:10px;justify-content:center;margin-top:48px">
+            {%- if paginate.previous -%}<a class="btn btn--ghost" href="{{ paginate.previous.url }}">&larr; Prev</a>{%- endif -%}
+            {%- if paginate.next -%}<a class="btn btn--ghost" href="{{ paginate.next.url }}">Next &rarr;</a>{%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- else -%}
+        <div class="collection-empty"><p>No posts yet. The lab is cooking.</p></div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The Pressure Lab" },
+    { "type": "textarea", "id": "lead", "label": "Lead", "default": "Production breakdowns, mixing tips, and the stories behind the sounds." }
+  ]
+}
+{% endschema %}
